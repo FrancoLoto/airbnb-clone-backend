@@ -2,28 +2,28 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-# User model
+# Modelo de Usuario
 class User(AbstractUser):
     is_host = models.BooleanField(default=False)
 
 
-# This model is created to store different types of amenities
+# Este modelo se crea para almacenar diferentes tipos de características de las propiedades
 class AmenityType(models.Model):
     name = models.CharField(max_length=100)
 
 
-# This model is used to store different types of properties
+# Este modelo se utiliza para almacenar diferentes tipos de propiedades
 class PropertyType(models.Model):
     name = models.CharField(max_length=100)
 
 
-# This model is used to store information about rooms within properties
+# Este modelo se utiliza para almacenar información sobre habitaciones dentro de propiedades
 class Room(models.Model):
     name = models.CharField(max_length=200)
     capacity = models.PositiveSmallIntegerField()
 
 
-# This model is used to store detailed information about a property
+# Este modelo se utiliza para almacenar información detallada sobre una propiedad
 class Property(models.Model):
     host = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
@@ -39,7 +39,7 @@ class Property(models.Model):
     amenities = models.ManyToManyField(AmenityType, through='Amenity')
 
 
-# This model is used to link amenities to properties
+# Este modelo se utiliza para vincular características a propiedades
 class Amenity(models.Model):
     property = models.ForeignKey(
         Property, on_delete=models.CASCADE, related_name='property_amenities')
@@ -50,7 +50,7 @@ class Amenity(models.Model):
         related_name='amenity_type')
 
 
-# This model is used to store booking information made by guests
+# Este modelo se utiliza para almacenar información de reservas realizadas por los huéspedes
 class Booking(models.Model):
     guest = models.ForeignKey(User, on_delete=models.CASCADE)
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
@@ -59,7 +59,7 @@ class Booking(models.Model):
     rooms = models.ManyToManyField(Room, through='RoomBooking')
 
 
-# This model is used to store deatils of room bookings within a general booking
+# Este modelo se utiliza para almacenar detalles de reservas de habitaciones dentro de una reserva general
 class RoomBooking(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
@@ -67,7 +67,7 @@ class RoomBooking(models.Model):
     children = models.PositiveSmallIntegerField()
 
 
-# This model is used to store reviews made by users for properties
+# Este modelo se utiliza para almacenar reseñas realizadas por usuarios para propiedades
 class Review(models.Model):
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
@@ -75,7 +75,7 @@ class Review(models.Model):
     rating = models.PositiveSmallIntegerField()
 
 
-# This model iss used to store information about photos related to properties
+# Este modelo se utiliza para almacenar información sobre fotos relacionadas con propiedades
 class Photo(models.Model):
     url = models.URLField()
     alt_text = models.CharField(max_length=200)
